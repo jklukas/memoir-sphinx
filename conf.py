@@ -169,17 +169,6 @@ htmlhelp_basename = 'SphinxMemoirSampledoc'
 
 # -- Options for LaTeX output --------------------------------------------------
 
-latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-'papersize': 'letterpaper',
-
-# The font size ('10pt', '11pt' or '12pt').
-'pointsize': '10pt',
-
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
-}
-
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
@@ -192,79 +181,116 @@ latex_docclass = {
     }
 
 latex_elements = {
+    # The paper size ('letterpaper' or 'a4paper').
+    'papersize': 'letterpaper',
+
+    # The font size ('10pt', '11pt' or '12pt').
+    'pointsize': '10pt',
+
+    # Disable fncychap, which is unnecessary with memoir.
     'fncychap' : '',
-    'printindex' : r'\printindex Some extra content',
-    'tableofcontents' : r'''
-\frontmatter
 
-\section{Dedication}
-This is my dedication.
+    # Allows to put extra content after the index.
+    'printindex' : r'''
+        \printindex
 
-\tableofcontents
+        Some extra content which appears after the index,
+        perhaps some blank pages.
+        ''',
 
-\mainmatter
-''',
-    'maketitle' : r'''
-\makeatletter
-  \begin{titlepage}%
-    \let\footnotesize\small
-    \let\footnoterule\relax
-    \rule{\textwidth}{1pt}%
-    \ifsphinxpdfoutput
-      \begingroup
-      % These \defs are required to deal with multi-line authors; it
-      % changes \\ to ', ' (comma-space), making it pass muster for
-      % generating document info in the PDF file.
-      \def\\{, }
-      \def\and{and }
-      \pdfinfo{
-        /Author (\@author)
-        /Title (\@title)
-      }
-      \endgroup
-    \fi
-    \begin{flushright}%
-      \sphinxlogo%
-      {\rm\Huge\py@HeaderFamily \@title \par}%
-      {\em\LARGE\py@HeaderFamily \py@release\releaseinfo \par}
-      \vfill
-      {\LARGE\py@HeaderFamily
-        \begin{tabular}[t]{c}
-          \@author
-        \end{tabular}
-        \par}
-      \vfill\vfill
-      {\large
-       \@date \par
-       \vfill
-       \py@authoraddress \par
-      }%
-    \end{flushright}%\par
-    \@thanks
-    \clearpage
-    \begin{center}
-      \null
-      \vfill
-      \copyright{} Copyright \@author{} \@date \\
-      All Rights Reserved
-      \vspace{1in}
-    \end{center}
-  \end{titlepage}%
-\makeatother
-''',
+    # This is technically NOT okay to change;
+    # TODO: We need a way to send extraneous options to the class.
+    'extraclassoptions' : 'oldfontcommands',
+
+    # In the preamble, we can set the paper size explicitly.
+    # Memoir defines \titlingpage instead of \titlepage, so we alias it.
     'preamble' : r'''
-%%%% Set a trade-size page
-\setstocksize{9in}{6in}
-\settrimmedsize{\stockheight}{\stockwidth}{*}
-\setulmarginsandblock{0.75in}{0.75in}{*}
-\setlrmarginsandblock{0.8in}{0.55in}{*}
-\setheaderspaces{0.5in}{*}{*}
-\checkandfixthelayout
+        %%%% Set a trade-size page
+        \setstocksize{9in}{6in}
+        \settrimmedsize{\stockheight}{\stockwidth}{*}
+        \setulmarginsandblock{0.75in}{0.75in}{*}
+        \setlrmarginsandblock{0.8in}{0.55in}{*}
+        \setheaderspaces{0.5in}{*}{*}
+        \checkandfixthelayout
 
-\newenvironment{titlepage}{\begin{titlingpage}}{\end{titlingpage}}
-''',
+        \newenvironment{titlepage}{\begin{titlingpage}}{\end{titlingpage}}
+        ''',
+
+    # Here's our hook to add extra content before/after the TOC.
+    'tableofcontents' : r'''
+        \frontmatter
+
+        \section{Dedication}
+        This is my dedication.
+
+        \tableofcontents
+
+        \mainmatter
+
+        ''',
+
+    # Here's our hook to modify the title page and add extra content.
+    # This is how we get a copyright page.
+    'maketitle' : r'''
+        \makeatletter
+
+          \begin{titlepage}%
+          \null
+          \vfill
+            \begin{flushright}%
+            {\rm\Huge\py@HeaderFamily \@title \par}%
+            \end{flushright}
+          \vfill
+          \vfill
+          \end{titlepage}
+
+          \begin{titlepage}%
+            \let\footnotesize\small
+            \let\footnoterule\relax
+            \rule{\textwidth}{1pt}%
+            \ifsphinxpdfoutput
+              \begingroup
+              % These \defs are required to deal with multi-line authors; it
+              % changes \\ to ', ' (comma-space), making it pass muster for
+              % generating document info in the PDF file.
+              \def\\{, }
+              \def\and{and }
+              \pdfinfo{
+                /Author (\@author)
+                /Title (\@title)
+              }
+              \endgroup
+            \fi
+            \begin{flushright}%
+              \sphinxlogo%
+              {\rm\Huge\py@HeaderFamily \@title \par}%
+              {\em\LARGE\py@HeaderFamily \py@release\releaseinfo \par}
+              \vfill
+              {\LARGE\py@HeaderFamily
+                \begin{tabular}[t]{c}
+                  \@author
+                \end{tabular}
+                \par}
+              \vfill\vfill
+              {\large
+               \@date \par
+               \vfill
+               \py@authoraddress \par
+              }%
+            \end{flushright}%\par
+            \@thanks
+            \clearpage
+            \begin{center}
+              \null
+              \vfill
+              \copyright{} Copyright \@author{} \@date \\
+              All Rights Reserved
+              \vspace{1in}
+            \end{center}
+          \end{titlepage}%
+        \makeatother
+        ''',
     }
-latex_elements['classoptions'] = ',english,oldfontcommands'
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
