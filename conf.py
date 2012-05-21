@@ -220,12 +220,16 @@ latex_elements = {
     'tableofcontents' : r'''
         \frontmatter
 
-        \section{Dedication}
+        \chapter{Dedication}
         This is my dedication.
 
         \tableofcontents
 
         \mainmatter
+
+        \addcontentsline{toc}{chapter}{\protect\numberline{}Introduction}
+        \chapter*{Introduction}
+        Here is my intro text.
 
         ''',
 
