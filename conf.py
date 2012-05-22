@@ -12,6 +12,7 @@
 # serve to show the default.
 
 import sys, os
+from glob import glob
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -180,6 +181,12 @@ latex_docclass = {
     'manual' : 'memoir',
     }
 
+# Additional files which are referenced in latex_elements below.
+# They get placed directly in the build directory.
+# Sphinx tries to run pdflatex on all .tex files in the build directory,
+# so we name the partials with a .texp suffix to distinguish.
+latex_additional_files = glob('latex/*.*')
+
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     'papersize': 'letterpaper',
@@ -198,102 +205,24 @@ latex_elements = {
         perhaps some blank pages.
         ''',
 
-    # This is technically NOT okay to change;
-    # TODO: We need a way to send extraneous options to the class.
+    # This is a NEW key which sphinx has been modified to accept.
     'extraclassoptions' : 'oldfontcommands',
 
-    # In the preamble, we can set the paper size explicitly.
-    # Memoir defines \titlingpage instead of \titlepage, so we alias it.
-    'preamble' : r'''
-        %%%% Set a trade-size page
-        \setstocksize{9in}{6in}
-        \settrimmedsize{\stockheight}{\stockwidth}{*}
-        \setulmarginsandblock{0.75in}{0.75in}{*}
-        \setlrmarginsandblock{0.8in}{0.55in}{*}
-        \setheaderspaces{0.5in}{*}{*}
-        \checkandfixthelayout
-
-        \newenvironment{titlepage}{\begin{titlingpage}}{\end{titlingpage}}
-        ''',
+    # Do the setup of paper size, margins, etc.
+    'preamble' : r'\input{preamble.texp}',
 
     # Here's our hook to add extra content before/after the TOC.
     'tableofcontents' : r'''
         \frontmatter
-
-        \chapter{Dedication}
-        This is my dedication.
-
+        \input{dedication.texp}
         \tableofcontents
-
         \mainmatter
-
-        \addcontentsline{toc}{chapter}{\protect\numberline{}Introduction}
-        \chapter*{Introduction}
-        Here is my intro text.
-
+        \input{introduction.texp}
         ''',
 
     # Here's our hook to modify the title page and add extra content.
     # This is how we get a copyright page.
-    'maketitle' : r'''
-        \makeatletter
-
-          \begin{titlepage}%
-          \null
-          \vfill
-            \begin{flushright}%
-            {\rm\Huge\py@HeaderFamily \@title \par}%
-            \end{flushright}
-          \vfill
-          \vfill
-          \end{titlepage}
-
-          \begin{titlepage}%
-            \let\footnotesize\small
-            \let\footnoterule\relax
-            \rule{\textwidth}{1pt}%
-            \ifsphinxpdfoutput
-              \begingroup
-              % These \defs are required to deal with multi-line authors; it
-              % changes \\ to ', ' (comma-space), making it pass muster for
-              % generating document info in the PDF file.
-              \def\\{, }
-              \def\and{and }
-              \pdfinfo{
-                /Author (\@author)
-                /Title (\@title)
-              }
-              \endgroup
-            \fi
-            \begin{flushright}%
-              \sphinxlogo%
-              {\rm\Huge\py@HeaderFamily \@title \par}%
-              {\em\LARGE\py@HeaderFamily \py@release\releaseinfo \par}
-              \vfill
-              {\LARGE\py@HeaderFamily
-                \begin{tabular}[t]{c}
-                  \@author
-                \end{tabular}
-                \par}
-              \vfill\vfill
-              {\large
-               \@date \par
-               \vfill
-               \py@authoraddress \par
-              }%
-            \end{flushright}%\par
-            \@thanks
-            \clearpage
-            \begin{center}
-              \null
-              \vfill
-              \copyright{} Copyright \@author{} \@date \\
-              All Rights Reserved
-              \vspace{1in}
-            \end{center}
-          \end{titlepage}%
-        \makeatother
-        ''',
+    'maketitle' : r'\input{frontmatter.texp}',
     }
 
 # The name of an image file (relative to this directory) to place at the top of

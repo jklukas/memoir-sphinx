@@ -1,0 +1,36 @@
+% Create indentedblock environment
+\def\indentedblock#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endindentedblock=\endlist
+
+% Add margins to light admonitions (i.e. Tip)
+\renewcommand{\py@lightbox}{
+  \begin{indentedblock}{\parindent}{\parindent}
+  {%
+  \setlength\parskip{0pt}\par
+  \noindent\rule[0ex]{\linewidth}{0.5pt}%
+  \par\noindent\vspace{-0.5ex}%
+  }}
+\renewcommand{\py@endlightbox}{{%
+  \setlength{\parskip}{0pt}%
+  \par\noindent\rule[0.5ex]{\linewidth}{0.5pt}%
+  \par\vspace{-0.5ex}%
+  }
+  \end{indentedblock}
+  }
+
+\renewcommand{\py@heavybox}{
+  \sf % Change text to sans-serif
+  \setlength{\fboxrule}{1pt}
+  \setlength{\fboxsep}{6pt}
+  \setlength{\py@noticelength}{\linewidth}
+  \addtolength{\py@noticelength}{-2\fboxsep}
+  \addtolength{\py@noticelength}{-2\fboxrule}
+  %\setlength{\shadowsize}{3pt}
+  \noindent\Sbox
+  \minipage{\py@noticelength}
+}
+\renewcommand{\py@endheavybox}{
+  \endminipage
+  \endSbox
+  \fbox{\TheSbox}
+}

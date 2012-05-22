@@ -1,0 +1,58 @@
+\makeatletter
+
+\begin{titlepage}%
+\null
+\vfill
+\begin{flushright}%
+{\rm\Huge\py@HeaderFamily \@title \par}%
+\end{flushright}
+\vfill
+\vfill
+\end{titlepage}
+
+\begin{titlepage}%
+\let\footnotesize\small
+\let\footnoterule\relax
+\rule{\textwidth}{1pt}%
+\ifsphinxpdfoutput
+  \begingroup
+  % These \defs are required to deal with multi-line authors; it
+  % changes \\ to ', ' (comma-space), making it pass muster for
+  % generating document info in the PDF file.
+  \def\\{, }
+  \def\and{and }
+  \pdfinfo{
+    /Author (\@author)
+    /Title (\@title)
+  }
+  \endgroup
+\fi
+\begin{flushright}%
+  \sphinxlogo%
+  {\rm\Huge\py@HeaderFamily \@title \par}%
+  {\em\LARGE\py@HeaderFamily \py@release\releaseinfo \par}
+  \vfill
+  {\LARGE\py@HeaderFamily
+    \begin{tabular}[t]{c}
+      \@author
+    \end{tabular}
+    \par}
+  \vfill\vfill
+  {\large
+   \@date \par
+   \vfill
+   \py@authoraddress \par
+  }%
+\end{flushright}%\par
+\@thanks
+\clearpage
+\begin{center}
+  \null
+  \vfill
+  \copyright{} Copyright \@author{} \@date \\
+  All Rights Reserved
+  \vspace{1in}
+\end{center}
+\end{titlepage}%
+
+\makeatother

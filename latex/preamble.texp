@@ -1,0 +1,13 @@
+% Set a trade-size page.
+\setstocksize{9in}{6in}
+\settrimmedsize{\stockheight}{\stockwidth}{*}
+\setulmarginsandblock{0.75in}{0.75in}{*}
+\setlrmarginsandblock{0.8in}{0.55in}{*}
+\setheaderspaces{0.5in}{*}{*}
+\checkandfixthelayout
+
+% Need to alias titlingpage to titlepage to match Sphinx's expectations.
+\newenvironment{titlepage}{\begin{titlingpage}}{\end{titlingpage}}
+
+% Import custom styles for my book.
+\usepackage{mystyles}
