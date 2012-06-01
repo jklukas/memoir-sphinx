@@ -11,3 +11,5 @@
 
 % Import custom styles for my book.
 \usepackage{mystyles}
+
+\pagestyle{ruled}
